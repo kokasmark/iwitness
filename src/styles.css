@@ -21,5 +21,21 @@ path {
   text-align: center;
 }
 .rsm-geography {
-  border: none;
+  outline: none;
+  fill: #427D9D;
+}
+.rsm-geography:focus{
+  fill: #9BBEC8;
+}
+.marker-article-hidden{
+  visibility: hidden;
+}
+.marker-article{
+  visibility: visible;
+}
+.marker-click{
+  cursor: pointer;
+}
+.article{
+  z-index: 10;
 }
