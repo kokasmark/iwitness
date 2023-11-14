@@ -1,7 +1,7 @@
 {
-  "name": "basic-map",
-  "version": "1.0.0",
-  "description": "Basic map example using react-simple-maps and world-110m.",
+  "name": "iwitness",
+  "version": "0.1.0",
+  "description": "Precise news from bystanders and eyewitnesses.",
   "keywords": [],
   "main": "src/index.js",
   "dependencies": {
