@@ -5,10 +5,12 @@ import "./styles.css";
 import {useState} from 'react';
 import ArticleMarker from './ArticleMarker';
 
-export default class NewPostButton extends Component
+
+class NewPostButton extends Component
 {
     state = {
-      newPost: false
+      newPost: false,
+      markers: []
     }
     static getDerivedStateFromProps(props,state) {
       return {coordinates: props.coordinates, articledata: props.articledata};
@@ -19,10 +21,16 @@ export default class NewPostButton extends Component
             document.getElementById('new-post-panel').style.visibility = 'visible';
         }else{
            var container = document.getElementById('marker-container');
-           var ntitle = document.getElementById('new-post-title').text;
-           var ntext = document.getElementById('new-post-text').text;
-           var newArticle = <ArticleMarker coordinates={[0,0]} articledata={{title: {ntitle},text:{ntext}}}/>
-           
+           var ntitle = document.getElementById('new-post-title').value;
+           var ntext = document.getElementById('new-post-text').value;
+
+           let newArticle = {title: 'title', text:'text',coordinates: [0,0]};
+           newArticle.title = ntitle;
+           newArticle.text = ntext;
+
+           this.props.parentCallback(newArticle);
+            console.log("Uploaded new article: "+newArticle.title);
+
            this.setState({newPost: false})
            document.getElementById('new-post-panel').style.visibility = 'hidden';
         }
@@ -34,4 +42,5 @@ export default class NewPostButton extends Component
     }
 
 }
+export default NewPostButton;
   
