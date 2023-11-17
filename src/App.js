@@ -19,8 +19,11 @@ class App extends React.Component {
   state = {
     mapWidth: 800,
     mapHeight: 600,
-    markers: [{ title: 'The first article!', text: 'This is no news just a milestone for this website!', coordinates: [0, 0] }],
-    userCoordinates: []
+    markers: [{ title: 'The first article!', text: 'This is no, news just a milestone for this website!', coordinates: [0, 0] }],
+    userCoordinates: [],
+    articlesToday: 1,
+    openFilters: false,
+    filters: {byVote: 0}
   };
 
 
@@ -28,9 +31,8 @@ class App extends React.Component {
     var newMarker = childData;
     newMarker.coordinates = this.state.userCoordinates;
     this.setState({
-      mapWidth: this.state.mapWidth,
-      mapHeight: this.state.mapHeight,
-      markers: [...this.state.markers, newMarker]
+      markers: [...this.state.markers, newMarker],
+      articlesToday: this.state.articlesToday+1
     });
   };
   geoLocation = (t) => {
@@ -39,25 +41,28 @@ class App extends React.Component {
     });
   }
 
-  scrollTo = () =>{
+  scrollToMap = () =>{
     var element = document.getElementById("map");
     element.scrollIntoView({behavior: "smooth", block: "center"});
   }
-  
-  currentLocale = () =>{
-    var dateVariable =  new Date();
-    return dateVariable.getFullYear()+"/"+dateVariable.getMonth()+"/"+dateVariable.getDate();
+  scrollToTitle = () =>{
+    var element = document.getElementById("title-label");
+    element.scrollIntoView({behavior: "smooth", block: "center"});
+  }
+
+  cancelPost = () =>{
+        document.getElementById('new-post-panel').style.visibility ='hidden';
   }
 
   render() {
     return (
       <div onLoad={this.geoLocation(this)}>
-        <div className="title-label">
+        <div className="title-label" id="title-label" onLoad={this.scrollToTitle}>
           <Card style={{ height: 300 }}>
             <Card.Body>
               <Card.Header className="text-center h1">Iwitness</Card.Header>
               <Card.Text className="text-center">iWitness is a dynamic platform that empowers users to share and explore real-time events through the eyes of eyewitnesses. Capture the essence of local happenings, breaking news, and unique perspectives, all on an interactive map-driven interface.</Card.Text>
-              <Button onClick={this.scrollTo} className="w-100">Go see todays news</Button>
+              <Button onClick={this.scrollToMap} className="w-100">Go see todays news</Button>
             </Card.Body>
           </Card>
         </div>
@@ -87,6 +92,7 @@ class App extends React.Component {
             </Geographies>
             <g id='marker-container'>
               {this.state.markers.map((marker) =>
+
                 <ArticleMarker key={marker.title}
                   coordinates={marker.coordinates} articledata={{ title: marker.title, text: marker.text }} />
               )}
@@ -97,8 +103,10 @@ class App extends React.Component {
         <Container className="fixed-top" style={{ height: 100 }}>
           <Navbar expand="lg" className="bg-body-tertiary" style={{ borderRadius: '0px 0px 10px 10px' }}>
             <Container>
-              <Navbar.Brand className="center">iWitness</Navbar.Brand>
-              <NewPostButton parentCallback={this.handleCallback} />
+              <Navbar.Brand className="center clickable" onClick={this.scrollToTitle}>iWitness</Navbar.Brand>
+              <Navbar.Brand className="center" style={{position:'relative',right:-150}}>{this.state.articlesToday} Articles posted today</Navbar.Brand>
+              <Button style={{position: 'relative', right:-200}} onClick={() => this.setState({openFilters: !this.state.openFilters})}>Filters</Button>
+              <NewPostButton parentCallback={this.handleCallback}/>
             </Container>
           </Navbar>
 
@@ -122,7 +130,13 @@ class App extends React.Component {
                 <circle r={20} fill="#F00" stroke="#fff" strokeWidth={1} />
               </Marker>
             </ComposableMap>
+            <p style={{color: 'red'}} className="text-center clickable" onClick={this.cancelPost}>Cancel</p>
           </div>
+          {this.state.openFilters && <div className="text-center" style={{ width: 200, height: 200, backgroundColor: 'white', borderRadius: '0px 0px 10px 10px', position: 'relative', left: 990,top:-400}}>
+            <Button style={{margin: 5,backgroundColor: 'orange', border:'none'}}>Top</Button>
+            <Button style={{margin: 5,backgroundColor: 'red', border:'none'}}>Controversial</Button>
+            <Button style={{margin: 5, border:'none'}}>New</Button>
+          </div>}
         </Container>
 
         <p className="fixed-bottom" style={{fontSize: 10, color: 'white'}}>Designed and developed by Kokas Márk</p>

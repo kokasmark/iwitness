@@ -4,6 +4,7 @@ html {
 
 body {
   margin: 0;
+  overflow: hidden;
 }
 
 svg {
@@ -35,11 +36,17 @@ path {
 .rsm-geography:focus{
   fill: #9BBEC8;
 }
+.rsm-geography:hover{
+  fill: #9BBEC8;
+}
 .marker-article-hidden{
   visibility: hidden;
 }
 .marker-article{
   visibility: visible;
+}
+.clickable{
+  cursor: pointer;
 }
 .marker-click{
   cursor: pointer;
