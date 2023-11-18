@@ -13,3 +13,16 @@
 * Server...Saving posts based on coordinate chunks
 * User token reservation for the day, users doesnt have accounts(because that way a person can be connected to a coordinate), they reserve tokens each day on the first login of the site.
 
+## Screenshots
+
+**Welcome Screen**
+![screenshot](https://github.com/kokasmark/iwitness/blob/main/screenshot_0.png)
+
+**Main Screen**
+![screenshot](https://github.com/kokasmark/iwitness/blob/main/screenshot_1.png)
+
+**New Post**
+![screenshot](https://github.com/kokasmark/iwitness/blob/main/screenshot_2.png)
+
+**Article filters**
+![screenshot](https://github.com/kokasmark/iwitness/blob/main/screenshot_3.png)
