@@ -34,7 +34,6 @@ export default class ArticleMarker extends Component
               userCanInteract: true
             });
             this.props.parent.scrollToArticle();
-            console.log('Can interact!');
           }
           else{
             this.setState({
@@ -42,7 +41,6 @@ export default class ArticleMarker extends Component
               userCanInteract: false
             });
             this.props.parent.scrollToArticle();
-            console.log('Cant interact!');
           }    }
     expand = (t) => {
       if(t.state.expanded == false){
@@ -52,11 +50,11 @@ export default class ArticleMarker extends Component
           timeout: 5000,
           maximumAge: Infinity});
       }else{
-        this.props.parent.scrollToMap();
         this.setState({
           expanded: !this.state.expanded,
           userCanInteract: false
         });
+        this.props.parent.scrollToMap();
       }
       
     }

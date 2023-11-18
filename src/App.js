@@ -7,7 +7,7 @@ import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Form from 'react-bootstrap/Form';
 import "./styles.css";
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import ArticleMarker from "./ArticleMarker";
 import NewPostButton from "./NewPostButton";
 
@@ -24,9 +24,9 @@ class App extends React.Component {
     userCoordinates: [],
     articlesToday: 0,
     openFilters: false,
-    filter: 'all'
+    filter: 'all',
+    zoom: 1
   };
-
 
   handleCallback = (childData) => {
 
@@ -44,30 +44,32 @@ class App extends React.Component {
   }
 
   scrollToMap = () =>{
-    var element = document.getElementById("map");
+    this.setState({zoom: 1});
+    var element = document.getElementById("zoom");
     element.scrollIntoView({behavior: "smooth", block: "center"});
     console.log('To Map!');
 
   }
   scrollToTitle = () =>{
+    this.setState({zoom: 1});
     var element = document.getElementById("title-label");
     element.scrollIntoView({behavior: "smooth", block: "center"});
     console.log('To Title!');
   }
   scrollToArticle = () =>{
+    this.setState({zoom: 1});
     var element = document.getElementById("article");
-    element.scrollIntoView({behavior: "smooth", block: "end"});
+    element.scrollIntoView({behavior: "smooth", block: "center"});
     console.log('To Article!');
   }
   cancelPost = () =>{
     this.setState({newPost: false})
     document.getElementById('new-post-panel').style.visibility ='hidden';
   }
-
   render() {
     return (
       <div onLoad={this.geoLocation(this)}>
-        <div className="title-label" id="title-label" onLoad={this.scrollToTitle}>
+        <div className="title-label" id="title-label">
           <Card style={{ height: 300 }}>
             <Card.Body>
               <Card.Header className="text-center h1">Iwitness</Card.Header>
@@ -85,11 +87,12 @@ class App extends React.Component {
             </Card.Body>
           </Card>
         </div>
+        
         <ComposableMap id="map" projectionConfig={{
-          scale: 100,
+          scale: 125,
           center: [0, 0],
         }}>
-          <ZoomableGroup id="zoom" width={this.state.mapWidth} height={this.state.mapHeight} center={[0, 0]} zoom={1} maxZoom={50} translateExtent={[
+          <ZoomableGroup id="zoom" width={this.state.mapWidth} height={this.state.mapHeight} center={[0, 0]} zoom={this.state.zoom} maxZoom={50} translateExtent={[
             [0, -this.state.mapHeight],
             [this.state.mapWidth, this.state.mapHeight]
           ]}>
@@ -119,7 +122,7 @@ class App extends React.Component {
             </Container>
           </Navbar>
 
-          <div id='new-post-panel' style={{ width: 300, height: 400, backgroundColor: 'white', borderRadius: '0px 0px 10px 10px', position: 'relative', left: 990, visibility: 'hidden' }}>
+          <Container className="fixed-center" id='new-post-panel' style={{ width: 300, height: 400, backgroundColor: 'white', borderRadius: '0px 0px 10px 10px', visibility: 'hidden' }}>
             <Form.Control size="lg" type="text" placeholder="Title" id='new-post-title' />
             <Form.Control size="sm" cols="30" rows="50" type="text" placeholder="Descibe what you see" id='new-post-text' />
             <Form.Control type="file" />
@@ -140,7 +143,7 @@ class App extends React.Component {
               </Marker>
             </ComposableMap>
             <p style={{color: 'red'}} className="text-center clickable" onClick={this.cancelPost}>Cancel</p>
-          </div>
+          </Container>
           {this.state.openFilters && <div className="text-center" style={{ width: 200, height: 200, backgroundColor: 'white', borderRadius: '0px 0px 10px 10px', position: 'relative', left: 990,top:-400}}>
             <Button style={{margin: 5,backgroundColor: 'orange', border:'none', color: this.state.filter == 'top' ? 'white' : 'black'}} onClick={() => this.setState({filter: 'top'})}>Top</Button>
             <Button style={{margin: 5,backgroundColor: 'red', border:'none', color: this.state.filter == 'controversial' ? 'white' : 'black'}} onClick={() => this.setState({filter: 'controversial'})}>Controversial</Button>
