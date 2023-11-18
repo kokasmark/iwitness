@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/kokasmark/iwitness/precache-manifest.9518b383727819f2428535789e9e9472.js"
+  "/kokasmark/iwitness/precache-manifest.7166ca24aad31316b39028341a68c4af.js"
 );
 
 self.addEventListener('message', (event) => {

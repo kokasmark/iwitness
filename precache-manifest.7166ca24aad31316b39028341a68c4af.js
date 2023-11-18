@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "da3014f709b41c91ff30a61e085517f3",
+    "revision": "db74cfb825db9799f54d1c240e735a5e",
     "url": "/kokasmark/iwitness/index.html"
   },
   {
