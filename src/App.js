@@ -25,7 +25,9 @@ class App extends React.Component {
     articlesToday: 0,
     openFilters: false,
     filter: 'all',
-    zoom: 1
+    zoom: 1,
+    mapCenter: [0,0],
+    mapScaleFactor: 1
   };
 
   handleCallback = (childData) => {
@@ -66,6 +68,9 @@ class App extends React.Component {
     this.setState({newPost: false})
     document.getElementById('new-post-panel').style.visibility ='hidden';
   }
+  zoomLocal = () =>{
+    this.setState({mapCenter: this.state.userCoordinates, zoom: 20, mapScaleFactor:20});
+  }
   render() {
     return (
       <div onLoad={this.geoLocation(this)}>
@@ -90,12 +95,12 @@ class App extends React.Component {
         
         <ComposableMap id="map" projectionConfig={{
           scale: 125,
-          center: [0, 0],
+          center: this.state.mapCenter,
         }}>
-          <ZoomableGroup id="zoom" width={this.state.mapWidth} height={this.state.mapHeight} center={[0, 0]} zoom={this.state.zoom} maxZoom={50} translateExtent={[
+          <ZoomableGroup id="zoom" width={this.state.mapWidth} height={this.state.mapHeight} center={this.state.mapCenter} zoom={this.state.zoom} maxZoom={50} translateExtent={[
             [0, -this.state.mapHeight],
             [this.state.mapWidth, this.state.mapHeight]
-          ]}>
+          ]} onMove={({ k }) => this.setState({mapScaleFactor: k})}>
             <Geographies geography="/features.json">
               {({ geographies }) =>
                 geographies.map((geo) => (
@@ -117,12 +122,12 @@ class App extends React.Component {
             <Container>
               <Navbar.Brand className="center clickable" onClick={this.scrollToTitle}>iWitness</Navbar.Brand>
               <Navbar.Brand className="center" style={{position:'relative',right:-150}}>{this.state.articlesToday} Articles posted today</Navbar.Brand>
-              <Button style={{position: 'relative', right:-200}} onClick={() => this.setState({openFilters: !this.state.openFilters})}>Filters</Button>
+              <Button style={{position: 'relative', right:-210}} onClick={() => this.setState({openFilters: !this.state.openFilters})}>Filters</Button>
               <NewPostButton parentCallback={this.handleCallback} parent={this}/>
             </Container>
           </Navbar>
 
-          <Container className="fixed-center" id='new-post-panel' style={{ width: 300, height: 400, backgroundColor: 'white', borderRadius: '0px 0px 10px 10px', visibility: 'hidden' }}>
+          <div className="fixed-center" id='new-post-panel' style={{ width: 300, height: 400, backgroundColor: 'white', borderRadius: '0px 0px 10px 10px',position:'relative',left:990, top:-10,visibility: 'hidden' }}>
             <Form.Control size="lg" type="text" placeholder="Title" id='new-post-title' />
             <Form.Control size="sm" cols="30" rows="50" type="text" placeholder="Descibe what you see" id='new-post-text' />
             <Form.Control type="file" />
@@ -143,12 +148,13 @@ class App extends React.Component {
               </Marker>
             </ComposableMap>
             <p style={{color: 'red'}} className="text-center clickable" onClick={this.cancelPost}>Cancel</p>
-          </Container>
-          {this.state.openFilters && <div className="text-center" style={{ width: 200, height: 200, backgroundColor: 'white', borderRadius: '0px 0px 10px 10px', position: 'relative', left: 990,top:-400}}>
-            <Button style={{margin: 5,backgroundColor: 'orange', border:'none', color: this.state.filter == 'top' ? 'white' : 'black'}} onClick={() => this.setState({filter: 'top'})}>Top</Button>
-            <Button style={{margin: 5,backgroundColor: 'red', border:'none', color: this.state.filter == 'controversial' ? 'white' : 'black'}} onClick={() => this.setState({filter: 'controversial'})}>Controversial</Button>
-            <Button style={{margin: 5, border:'none', color: this.state.filter == 'new' ? 'white' : 'black' }} onClick={() => this.setState({filter: 'new'})}>New</Button>
-            <Button style={{margin: 5, border: 'none', color: this.state.filter == 'all' ? 'white' : 'black'}} onClick={() => this.setState({filter: 'all'})}>All</Button>
+          </div>
+          {this.state.openFilters && <div className="text-center" style={{ width: 200, height: 220, backgroundColor: 'white', borderRadius: '0px 0px 10px 10px', position: 'relative', left: 990,top:-400}}>
+            <Button style={{margin: 5,backgroundColor: 'orange', border:'none', color: this.state.filter == 'top' ? 'white' : 'black'}} onClick={() => {this.setState({filter: 'top'});this.setState({mapCenter: [0,0], zoom: 1, mapScaleFactor:1});}}>Top</Button>
+            <Button style={{margin: 5,backgroundColor: 'red', border:'none', color: this.state.filter == 'controversial' ? 'white' : 'black'}} onClick={() => {this.setState({filter: 'controversial'});this.setState({mapCenter: [0,0], zoom: 1, mapScaleFactor:1});}}>Controversial</Button>
+            <Button style={{margin: 5, border:'none', color: this.state.filter == 'new' ? 'white' : 'black' }} onClick={() => {this.setState({filter: 'new'});this.setState({mapCenter: [0,0], zoom: 1, mapScaleFactor:1});}}>New</Button>
+            <Button style={{margin: 5, border: 'none', color: this.state.filter == 'all' ? 'white' : 'black'}} onClick={() => {this.setState({filter: 'all'});this.setState({mapCenter: [0,0], zoom: 1, mapScaleFactor:1});}}>All</Button>
+            <Button style={{margin: 5, border: 'none', color: this.state.filter == 'local' ? 'white' : 'black'}} onClick={() => {this.setState({filter: 'local'}); this.zoomLocal();}}>Local</Button>
           </div>}
         </Container>
 
