@@ -9,35 +9,35 @@ import ArticleMarker from './ArticleMarker';
 class NewPostButton extends Component
 {
     state = {
-      newPost: false,
       markers: []
     }
     static getDerivedStateFromProps(props,state) {
       return {coordinates: props.coordinates, articledata: props.articledata};
     }
     click = () => {
-        if(!this.state.newPost){
-            this.setState({newPost: true})
+        if(!this.props.parent.state.newPost){
+            this.props.parent.setState({newPost: true})
             document.getElementById('new-post-panel').style.visibility = 'visible';
         }else{
            var container = document.getElementById('marker-container');
            var ntitle = document.getElementById('new-post-title').value;
            var ntext = document.getElementById('new-post-text').value;
 
-           let newArticle = {title: 'title', text:'text',coordinates: [0,0]};
+           let newArticle = {title: 'title', text:'text',coordinates: [0,0], createdAt: new Date().getTime()};
            newArticle.title = ntitle;
            newArticle.text = ntext;
 
            this.props.parentCallback(newArticle);
-            console.log("Uploaded new article: "+newArticle.title);
+            console.log("Uploaded new article: "+newArticle.title + " at "+ newArticle.createdAt);
 
-           this.setState({newPost: false})
+            this.props.parent.setState({newPost: false})
+            this.props.parent.scrollToMap();
            document.getElementById('new-post-panel').style.visibility = 'hidden';
         }
     }
     render(){
         return (
-            <Button id='post-button' variant="primary" onClick={this.click}>{this.state.newPost == true ? 'Upload Post' : 'New Post'}</Button>
+            <Button id='post-button' variant="primary" onClick={this.click}>{this.props.parent.state.newPost == true ? 'Upload Post' : 'New Post'}</Button>
       );
     }
 

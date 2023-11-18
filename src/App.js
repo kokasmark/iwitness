@@ -20,14 +20,16 @@ class App extends React.Component {
     mapWidth: 800,
     mapHeight: 600,
     markers: [{ title: 'The first article!', text: 'This is no, news just a milestone for this website!', coordinates: [0, 0] }],
+    newPost: false,
     userCoordinates: [],
-    articlesToday: 1,
+    articlesToday: 0,
     openFilters: false,
-    filters: {byVote: 0}
+    filter: 'all'
   };
 
 
   handleCallback = (childData) => {
+
     var newMarker = childData;
     newMarker.coordinates = this.state.userCoordinates;
     this.setState({
@@ -44,14 +46,22 @@ class App extends React.Component {
   scrollToMap = () =>{
     var element = document.getElementById("map");
     element.scrollIntoView({behavior: "smooth", block: "center"});
+    console.log('To Map!');
+
   }
   scrollToTitle = () =>{
     var element = document.getElementById("title-label");
     element.scrollIntoView({behavior: "smooth", block: "center"});
+    console.log('To Title!');
   }
-
+  scrollToArticle = () =>{
+    var element = document.getElementById("article");
+    element.scrollIntoView({behavior: "smooth", block: "end"});
+    console.log('To Article!');
+  }
   cancelPost = () =>{
-        document.getElementById('new-post-panel').style.visibility ='hidden';
+    this.setState({newPost: false})
+    document.getElementById('new-post-panel').style.visibility ='hidden';
   }
 
   render() {
@@ -92,9 +102,8 @@ class App extends React.Component {
             </Geographies>
             <g id='marker-container'>
               {this.state.markers.map((marker) =>
-
                 <ArticleMarker key={marker.title}
-                  coordinates={marker.coordinates} articledata={{ title: marker.title, text: marker.text }} />
+                  coordinates={marker.coordinates} articledata={{ title: marker.title, text: marker.text }} createdAt={marker.createdAt} parent={this} />
               )}
             </g>
           </ZoomableGroup>
@@ -106,7 +115,7 @@ class App extends React.Component {
               <Navbar.Brand className="center clickable" onClick={this.scrollToTitle}>iWitness</Navbar.Brand>
               <Navbar.Brand className="center" style={{position:'relative',right:-150}}>{this.state.articlesToday} Articles posted today</Navbar.Brand>
               <Button style={{position: 'relative', right:-200}} onClick={() => this.setState({openFilters: !this.state.openFilters})}>Filters</Button>
-              <NewPostButton parentCallback={this.handleCallback}/>
+              <NewPostButton parentCallback={this.handleCallback} parent={this}/>
             </Container>
           </Navbar>
 
@@ -133,9 +142,10 @@ class App extends React.Component {
             <p style={{color: 'red'}} className="text-center clickable" onClick={this.cancelPost}>Cancel</p>
           </div>
           {this.state.openFilters && <div className="text-center" style={{ width: 200, height: 200, backgroundColor: 'white', borderRadius: '0px 0px 10px 10px', position: 'relative', left: 990,top:-400}}>
-            <Button style={{margin: 5,backgroundColor: 'orange', border:'none'}}>Top</Button>
-            <Button style={{margin: 5,backgroundColor: 'red', border:'none'}}>Controversial</Button>
-            <Button style={{margin: 5, border:'none'}}>New</Button>
+            <Button style={{margin: 5,backgroundColor: 'orange', border:'none', color: this.state.filter == 'top' ? 'white' : 'black'}} onClick={() => this.setState({filter: 'top'})}>Top</Button>
+            <Button style={{margin: 5,backgroundColor: 'red', border:'none', color: this.state.filter == 'controversial' ? 'white' : 'black'}} onClick={() => this.setState({filter: 'controversial'})}>Controversial</Button>
+            <Button style={{margin: 5, border:'none', color: this.state.filter == 'new' ? 'white' : 'black' }} onClick={() => this.setState({filter: 'new'})}>New</Button>
+            <Button style={{margin: 5, border: 'none', color: this.state.filter == 'all' ? 'white' : 'black'}} onClick={() => this.setState({filter: 'all'})}>All</Button>
           </div>}
         </Container>
 
