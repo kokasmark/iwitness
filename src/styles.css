@@ -44,6 +44,9 @@ path {
 button:hover{
   transform: scale(1.05);
 }
+.interactive:hover{
+  transform: scale(1.05);
+}
 .marker-article-hidden{
   visibility: hidden;
 }

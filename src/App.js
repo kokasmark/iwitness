@@ -79,9 +79,9 @@ class App extends React.Component {
         <div className="title-label" id="title-label">
           <Card style={{ height: 300 }}>
             <Card.Body>
-              <Card.Header className="text-center h1">Iwitness</Card.Header>
-              <Card.Text className="text-center">iWitness is a dynamic platform that empowers users to share and explore real-time events through the eyes of eyewitnesses. Capture the essence of local happenings, breaking news, and unique perspectives, all on an interactive map-driven interface.</Card.Text>
-              <Button onClick={this.scrollToMap} className="w-100">Go see todays news</Button>
+              <Card.Header className="text-center h1"><img src={logo} className="center clickable interactive" onClick={this.scrollToTitle} style={{height: 100, width: 500}}/></Card.Header>
+              <Card.Text className="text-center" style={{fontSize:19}}>iWitness is a dynamic platform that empowers users to share and explore real-time events through the eyes of eyewitnesses. Capture the essence of local happenings, breaking news, and unique perspectives, all on an interactive map-driven interface.</Card.Text>
+              <Button onClick={this.scrollToMap} className="w-100 text-center" style={{position:'relative',top:-20, height: 40, padding:0}}>Go see todays news</Button>
             </Card.Body>
           </Card>
         </div>
@@ -119,13 +119,13 @@ class App extends React.Component {
           </ZoomableGroup>
         </ComposableMap>
 
-        <Container className="fixed-top" style={{ height: 100 }}>
-          <Navbar expand="lg" className="bg-body-tertiary" style={{ borderRadius: '0px 0px 10px 10px' }}>
+        <Container className="fixed-top" style={{ height: 100}}>
+          <Navbar expand="lg" style={{ borderRadius: '0px 0px 10px 10px', backgroundColor: 'white' }}>
             <Container>
-              <img src={logo} className="center clickable" onClick={this.scrollToTitle} style={{height: 50, width: 250, position: 'relative', right: 50}}/>
+              <img src={logo} className="center clickable interactive" onClick={this.scrollToTitle} style={{height: 50, width: 250, position: 'relative', right: 50}}/>
               <Navbar.Brand className="center" style={{position:'relative',right:-100}}>{this.state.articlesToday} Articles posted today</Navbar.Brand>
-              <Button style={{position: 'relative', right:-175}} onClick={() => this.setState({openFilters: !this.state.openFilters})}>Filters</Button>
-              <NewPostButton parentCallback={this.handleCallback} parent={this}/>
+              <Button style={{position: 'relative', right:-160}} onClick={() => this.setState({openFilters: !this.state.openFilters})} className="interactive">Filters</Button>
+              <NewPostButton parentCallback={this.handleCallback} parent={this} className="interactive"/>
             </Container>
           </Navbar>
 
