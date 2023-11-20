@@ -21,7 +21,7 @@ class App extends React.Component {
   state = {
     mapWidth: 800,
     mapHeight: 600,
-    markers: [{ title: 'The first article!', text: 'This is no, news just a milestone for this website!', coordinates: [0, 0] }],
+    markers: [],
     newPost: false,
     userCoordinates: [],
     articlesToday: 0,
@@ -29,7 +29,8 @@ class App extends React.Component {
     filter: 'all',
     zoom: 1,
     mapCenter: [0,0],
-    mapScaleFactor: 1
+    mapScaleFactor: 1,
+    blur: false
   };
 
   handleCallback = (childData) => {
@@ -67,7 +68,7 @@ class App extends React.Component {
     console.log('To Article!');
   }
   cancelPost = () =>{
-    this.setState({newPost: false})
+    this.setState({newPost: false, blur: false})
     document.getElementById('new-post-panel').style.visibility ='hidden';
   }
   zoomLocal = () =>{
@@ -77,11 +78,11 @@ class App extends React.Component {
     return (
       <div onLoad={this.geoLocation(this)}>
         <div className="title-label" id="title-label">
-          <Card style={{ height: 300 }}>
+          <Card style={{ height: 315 }}>
             <Card.Body>
-              <Card.Header className="text-center h1"><img src={logo} className="center clickable interactive" onClick={this.scrollToTitle} style={{height: 100, width: 500}}/></Card.Header>
+              <Card.Header className="text-center h1"><img src={logo} className="center" style={{height: 100, width: 500}}/></Card.Header>
               <Card.Text className="text-center" style={{fontSize:19}}>iWitness is a dynamic platform that empowers users to share and explore real-time events through the eyes of eyewitnesses. Capture the essence of local happenings, breaking news, and unique perspectives, all on an interactive map-driven interface.</Card.Text>
-              <Button onClick={this.scrollToMap} className="w-100 text-center" style={{position:'relative',top:-20, height: 40, padding:0}}>Go see todays news</Button>
+              <Button onClick={this.scrollToMap} className="w-100 text-center" style={{position:'relative',top:-20, height: 40, padding:0, marginTop: 10}}>Go see todays news</Button>
             </Card.Body>
           </Card>
         </div>
@@ -98,7 +99,7 @@ class App extends React.Component {
         <ComposableMap id="map" projectionConfig={{
           scale: 125,
           center: this.state.mapCenter,
-        }}>
+        }} style={this.state.blur == true ? {filter: 'blur(3px)'}:{}}>
           <ZoomableGroup id="zoom" width={this.state.mapWidth} height={this.state.mapHeight} center={this.state.mapCenter} zoom={this.state.zoom} maxZoom={50} translateExtent={[
             [0, -this.state.mapHeight/4],
             [this.state.mapWidth, this.state.mapHeight]
@@ -119,7 +120,7 @@ class App extends React.Component {
           </ZoomableGroup>
         </ComposableMap>
 
-        <Container className="fixed-top" style={{ height: 100}}>
+        <Container className="fixed-top" style={{height: 100}}>
           <Navbar expand="lg" style={{ borderRadius: '0px 0px 10px 10px', backgroundColor: 'white' }}>
             <Container>
               <img src={logo} className="center clickable interactive" onClick={this.scrollToTitle} style={{height: 50, width: 250, position: 'relative', right: 50}}/>
@@ -129,9 +130,10 @@ class App extends React.Component {
             </Container>
           </Navbar>
 
-          <div className="fixed-center" id='new-post-panel' style={{ width: 300, height: 400, backgroundColor: 'white', borderRadius: '0px 0px 10px 10px',position:'relative',left:990, top:-10,visibility: 'hidden' }}>
-            <Form.Control size="lg" type="text" placeholder="Title" id='new-post-title' />
-            <Form.Control size="sm" cols="30" rows="50" type="text" placeholder="Descibe what you see" id='new-post-text' />
+          {this.state.newPost && <h1 style={{color: 'white' ,position: 'relative', top: 200, right: -500}}>New Post</h1>}
+          <div className="fixed-center" id='new-post-panel' style={{width: 300, height: 400, backgroundColor: 'white', borderRadius: '10px',position: 'relative', top: 200, right: -500,visibility: 'hidden' }}>
+            <Form.Control autocomplete="off" size="lg" type="text" placeholder="Title" id='new-post-title' />
+            <Form.Control autocomplete="off" size="sm" cols="30" rows="50" type="text" placeholder="Descibe what you see" id='new-post-text' />
             <Form.Control type="file" />
             <ComposableMap projectionConfig={{
               scale: 5000,
@@ -149,7 +151,7 @@ class App extends React.Component {
                 <circle r={20} fill="#F00" stroke="#fff" strokeWidth={1} />
               </Marker>
             </ComposableMap>
-            <p style={{color: 'red'}} className="text-center clickable" onClick={this.cancelPost}>Cancel</p>
+            <p style={{color: 'red'}} className="text-center clickable interactive" onClick={this.cancelPost}>Cancel</p>
           </div>
           {this.state.openFilters && <div className="text-center" style={{ width: 200, height: 220, backgroundColor: 'white', borderRadius: '0px 0px 10px 10px', position: 'relative', left: 990,top:-400}}>
             <Button style={{margin: 5,backgroundColor: 'orange', border:'none', color: this.state.filter == 'top' ? 'white' : 'black'}} onClick={() => {this.setState({filter: 'top'});this.setState({mapCenter: [0,0], zoom: 1, mapScaleFactor:1});}}>Top</Button>

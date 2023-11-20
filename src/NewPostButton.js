@@ -15,6 +15,7 @@ class NewPostButton extends Component
       return {coordinates: props.coordinates, articledata: props.articledata};
     }
     click = () => {
+      this.props.parent.setState({blur: true});
       document.getElementById('new-post-title').style.borderColor = 'white';
       document.getElementById('new-post-text').style.borderColor = 'white';
         if(!this.props.parent.state.newPost){
@@ -41,9 +42,12 @@ class NewPostButton extends Component
             this.props.parentCallback(newArticle);
             console.log("Uploaded new article: "+newArticle.title + " at "+ newArticle.createdAt);
             
-            this.props.parent.setState({newPost: false})
+            this.props.parent.setState({newPost: false,blur: false})
             this.props.parent.scrollToMap();
            document.getElementById('new-post-panel').style.visibility = 'hidden';
+
+           document.getElementById('new-post-title').value = "";
+           document.getElementById('new-post-text').value = "";
            }
         }
     }
