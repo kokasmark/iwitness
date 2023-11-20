@@ -11,6 +11,8 @@ import { useState, useRef, useEffect } from 'react';
 import ArticleMarker from "./ArticleMarker";
 import NewPostButton from "./NewPostButton";
 
+import logo from "./assets/icon_logo_dark.png";
+
 
 class App extends React.Component {
   constructor(props) {
@@ -98,7 +100,7 @@ class App extends React.Component {
           center: this.state.mapCenter,
         }}>
           <ZoomableGroup id="zoom" width={this.state.mapWidth} height={this.state.mapHeight} center={this.state.mapCenter} zoom={this.state.zoom} maxZoom={50} translateExtent={[
-            [0, -this.state.mapHeight],
+            [0, -this.state.mapHeight/4],
             [this.state.mapWidth, this.state.mapHeight]
           ]} onMove={({ k }) => this.setState({mapScaleFactor: k})}>
             <Geographies geography="/features.json">
@@ -120,9 +122,9 @@ class App extends React.Component {
         <Container className="fixed-top" style={{ height: 100 }}>
           <Navbar expand="lg" className="bg-body-tertiary" style={{ borderRadius: '0px 0px 10px 10px' }}>
             <Container>
-              <Navbar.Brand className="center clickable" onClick={this.scrollToTitle}>iWitness</Navbar.Brand>
-              <Navbar.Brand className="center" style={{position:'relative',right:-150}}>{this.state.articlesToday} Articles posted today</Navbar.Brand>
-              <Button style={{position: 'relative', right:-210}} onClick={() => this.setState({openFilters: !this.state.openFilters})}>Filters</Button>
+              <img src={logo} className="center clickable" onClick={this.scrollToTitle} style={{height: 50, width: 250, position: 'relative', right: 50}}/>
+              <Navbar.Brand className="center" style={{position:'relative',right:-100}}>{this.state.articlesToday} Articles posted today</Navbar.Brand>
+              <Button style={{position: 'relative', right:-175}} onClick={() => this.setState({openFilters: !this.state.openFilters})}>Filters</Button>
               <NewPostButton parentCallback={this.handleCallback} parent={this}/>
             </Container>
           </Navbar>

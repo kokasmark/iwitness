@@ -32,12 +32,17 @@ path {
 .rsm-geography {
   outline: none;
   fill: #427D9D;
+  stroke: white;
+  stroke-width: 0.1px;
 }
 .rsm-geography:focus{
   fill: #9BBEC8;
 }
 .rsm-geography:hover{
   fill: #9BBEC8;
+}
+button:hover{
+  transform: scale(1.05);
 }
 .marker-article-hidden{
   visibility: hidden;
