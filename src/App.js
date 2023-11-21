@@ -75,8 +75,8 @@ class App extends React.Component {
     this.setState({mapCenter: this.state.userCoordinates, zoom: 20, mapScaleFactor:20});
   }
   loadMarkers = () =>{
-      fetch("http://localhost:5000/data.txt")
-    .then((response) => console.log(response));
+      fetch("http://localhost:5000/data")
+    .then((response) => console.log(response.body.text));
   }
   render() {
     this.loadMarkers();
