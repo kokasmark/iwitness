@@ -10,6 +10,7 @@ import "./styles.css";
 import { useState, useRef, useEffect } from 'react';
 import ArticleMarker from "./ArticleMarker";
 import NewPostButton from "./NewPostButton";
+import {userInit} from "./User";
 
 import logo from "./assets/icon_logo_dark.png";
 
@@ -74,12 +75,32 @@ class App extends React.Component {
   zoomLocal = () =>{
     this.setState({mapCenter: this.state.userCoordinates, zoom: 20, mapScaleFactor:20});
   }
-  loadMarkers = () =>{
-      fetch("http://localhost:5000/data")
-    .then((response) => console.log(response.body.text));
+  loadMarkers = (self) =>{
+    var requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+    };
+    
+    fetch("http://127.0.0.1:5000/data", requestOptions)
+      .then(response => response.text())
+      .then(function succes(result){
+          const markers = result.split('\n')
+          for(var i = 0; i < markers.length; i++){
+            var parsed = JSON.parse(markers[i]);
+            var newMarker = {title: parsed['title'], text: parsed['text'], coordinates: parsed['coordinates'], createdAt: parsed['createdAt'], author: parsed['author'], votes: parsed['votes'], id: parsed['id']}
+            self.setState({
+              markers: [...self.state.markers, newMarker],
+              articlesToday: self.state.articlesToday+1
+            });
+          }
+      })
+      .catch(error => console.log('error', error));
+  }
+  componentDidMount(){
+    userInit();
+    this.loadMarkers(this);
   }
   render() {
-    this.loadMarkers();
     return (
       <div onLoad={this.geoLocation(this)}>
         <div className="title-label" id="title-label">
@@ -119,7 +140,8 @@ class App extends React.Component {
             <g id='marker-container'>
               {this.state.markers.map((marker) =>
                 <ArticleMarker key={marker.title}
-                  coordinates={marker.coordinates} articledata={{ title: marker.title, text: marker.text }} createdAt={marker.createdAt} parent={this} />
+                  coordinates={marker.coordinates} articledata={{ title: marker.title, text: marker.text }} createdAt={marker.createdAt} author={marker.author}
+                  votes={marker.votes} id={marker.id} parent={this} />
               )}
             </g>
           </ZoomableGroup>

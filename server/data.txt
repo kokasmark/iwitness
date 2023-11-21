@@ -1,1 +1,3 @@
-test;testttttt;[17.6323528, 47.6825376];1700560798522
+{"title": "test", "text": "test", "coordinates": [17.6733157, 47.6557308], "createdAt": 1700585337828, "author": "47yd2l2121t89m3wgmfoyg-10/21", "id": 4, "votes": [13, 0]}
+{"title": "asdasd", "text": "asdasd", "coordinates": [18.6733157, 47.6557308], "createdAt": 1700586140343, "author": "37yd2l2121t89m3wgmfoyg-10/21", "id": 1, "votes": [0, 0]}
+{"title": "asdasd", "text": "asdsadasd", "coordinates": [19.6733157, 47.6557308], "createdAt": 1700586159176, "author": "47yd2l2121t89m3wgmfoyg-10/21", "id": 2, "votes": [0, 0]}
