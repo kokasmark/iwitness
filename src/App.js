@@ -10,7 +10,7 @@ import "./styles.css";
 import { useState, useRef, useEffect } from 'react';
 import ArticleMarker from "./ArticleMarker";
 import NewPostButton from "./NewPostButton";
-import {userInit} from "./User";
+import {getUserToken, userInit} from "./User";
 
 import logo from "./assets/icon_logo_dark.png";
 
@@ -57,7 +57,7 @@ class App extends React.Component {
 
   }
   scrollToTitle = () =>{
-    this.setState({zoom: 1});
+    this.setState({zoom: 1, mapCenter: [0,0]});
     var element = document.getElementById("title-label");
     element.scrollIntoView({behavior: "smooth", block: "center"});
     console.log('To Title!');
@@ -189,7 +189,7 @@ class App extends React.Component {
           </div>}
         </Container>
 
-        <p className="fixed-bottom" style={{fontSize: 10, color: 'white'}}>Designed and developed by Kokas Márk</p>
+        <p className="fixed-bottom" style={{fontSize: 10, color: 'white'}}>Designed and developed by Kokas Márk - {getUserToken()}</p>
       </div>
     );
   }

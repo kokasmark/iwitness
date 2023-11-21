@@ -1,20 +1,32 @@
 from flask import Flask, request , make_response # Import flask
 from flask_cors import CORS, cross_origin
-from flask_apscheduler import APScheduler
+from apscheduler.schedulers.background import BackgroundScheduler
 import json
+from datetime import datetime
 
 
 app = Flask(__name__, static_url_path='')  # Setup the Flask app by creating an instance of Flask
 cors = CORS(app, resources={r"/data": {"origins": "*"}})
 app.config['CORS_HEADERS'] = 'Content-Type'
-scheduler = APScheduler()
-scheduler.init_app(app)
 
-@scheduler.task('cron', id='clearServer', hour=0) # every day at noon
+scheduler = BackgroundScheduler()
+
+today = "21"
+
 def clearServer():
-    with open('data.txt', 'w') as f:
-            f.write("")
-    return 'server cleared'
+    global today
+    t = str(datetime.now().strftime("%d"))
+   
+    if(t != today):
+        with open('data.txt', 'w') as f:
+                f.write("")
+        print('DATA WIPED')
+
+    print("Status OK - "+str(datetime.now()))
+
+    today = t
+
+scheduler.add_job(func=clearServer, trigger='interval', seconds=30)
 
 def toJson(data):
     getid=len(open('data.txt','r').read().split('\n'))
@@ -58,8 +70,7 @@ def updateMarker():
             f.writelines(articles)
     return app.send_static_file('index.html')          
 
-# You can add your other routes here if you want
-# You could event have other API routes that the React app requests
 
-if __name__ == '__main__':  # If the script that was run is this script (we have not been imported)
+if __name__ == '__main__': 
+    scheduler.start() # If the script that was run is this script (we have not been imported)
     app.run(debug = True)  # Start the server
