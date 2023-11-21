@@ -138,7 +138,7 @@ export default class ArticleMarker extends Component
     render(){
         return (
             <Marker className="marker-click" key={"test"} coordinates={this.state.coordinates} onClick={() => this.expand(this)} onMouseOver={()=>this.setState({hover: true})} onMouseLeave={()=>this.setState({hover: false})}>
-                {this.filterMarker() &&<circle className="marker-child" r={this.state.significance/this.props.parent.state.mapScaleFactor} fill="#F00" stroke="#fff" strokeWidth={1/this.props.parent.state.mapScaleFactor} articledata ="title"/>}
+                {this.filterMarker() &&<circle className="marker-child" r={(1+(0.1*this.state.votes[0])+(-0.1*this.state.votes[1]))/this.props.parent.state.mapScaleFactor} fill="#F00" stroke="#fff" strokeWidth={1/this.props.parent.state.mapScaleFactor} articledata ="title"/>}
                 {this.state.hover && <foreignObject width="100" height="50"><p style={{fontSize:5/this.props.parent.state.mapScaleFactor, color: 'white'}}>{this.state.articledata.title}</p></foreignObject>}
                 {this.state.expanded && <foreignObject width="300" height="500" id="article" className="marker-article">
                 {this.filterMarker() && <Card className="text-center" style={{width: 150, height: 250}}>

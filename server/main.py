@@ -1,11 +1,20 @@
 from flask import Flask, request , make_response # Import flask
 from flask_cors import CORS, cross_origin
+from flask_apscheduler import APScheduler
 import json
+
 
 app = Flask(__name__, static_url_path='')  # Setup the Flask app by creating an instance of Flask
 cors = CORS(app, resources={r"/data": {"origins": "*"}})
 app.config['CORS_HEADERS'] = 'Content-Type'
+scheduler = APScheduler()
+scheduler.init_app(app)
 
+@scheduler.task('cron', id='clearServer', hour=0) # every day at noon
+def clearServer():
+    with open('data.txt', 'w') as f:
+            f.write("")
+    return 'server cleared'
 
 def toJson(data):
     getid=len(open('data.txt','r').read().split('\n'))
