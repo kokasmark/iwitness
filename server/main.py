@@ -1,20 +1,13 @@
-from http.server import BaseHTTPRequestHandler, HTTPServer
+from flask import Flask  # Import flask
 
-class handler(BaseHTTPRequestHandler):
-    def do_GET(self):
-        self.send_response(200)
-        self.send_header('Content-type','text/html')
-        self.end_headers()
+app = Flask(__name__, static_url_path='')  # Setup the Flask app by creating an instance of Flask
 
-        message = "Hello, World! Here is a GET response"
-        self.wfile.write(bytes(message, "utf8"))
-    def do_POST(self):
-        self.send_response(200)
-        self.send_header('Content-type','text/html')
-        self.end_headers()
+@app.route('/')  # When someone goes to / on the server, execute the following function
+def home():
+    return app.send_static_file('index.html')  # Return index.html from the static folder
 
-        message = "Hello, World! Here is a POST response"
-        self.wfile.write(bytes(message, "utf8"))
+# You can add your other routes here if you want
+# You could event have other API routes that the React app requests
 
-with HTTPServer(('', 8000), handler) as server:
-    server.serve_forever()
+if __name__ == '__main__':  # If the script that was run is this script (we have not been imported)
+    app.run()  # Start the server

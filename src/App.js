@@ -74,6 +74,7 @@ class App extends React.Component {
   zoomLocal = () =>{
     this.setState({mapCenter: this.state.userCoordinates, zoom: 20, mapScaleFactor:20});
   }
+  
   render() {
     return (
       <div onLoad={this.geoLocation(this)}>
