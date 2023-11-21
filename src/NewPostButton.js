@@ -41,7 +41,18 @@ class NewPostButton extends Component
            if(goodToPublish){
             this.props.parentCallback(newArticle);
             console.log("Uploaded new article: "+newArticle.title + " at "+ newArticle.createdAt);
-            
+            fetch("http://localhost:5000/", {
+              method: "POST",
+              body: JSON.stringify({
+                articleTitle: newArticle.title,
+                articleText: newArticle.text,
+                coordinates: newArticle.coordinates,
+                createdAt: newArticle.createdAt
+              }),
+              headers: {
+                "Content-type": "application/json; charset=UTF-8"
+              }
+            });
             this.props.parent.setState({newPost: false,blur: false})
             this.props.parent.scrollToMap();
            document.getElementById('new-post-panel').style.visibility = 'hidden';

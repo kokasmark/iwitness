@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import { ComposableMap, Geographies, Geography, Marker, ZoomableGroup } from "react-simple-maps";
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import Card from 'react-bootstrap/Card';
@@ -74,8 +74,12 @@ class App extends React.Component {
   zoomLocal = () =>{
     this.setState({mapCenter: this.state.userCoordinates, zoom: 20, mapScaleFactor:20});
   }
-  
+  loadMarkers = () =>{
+      fetch("http://localhost:5000/data.txt")
+    .then((response) => console.log(response));
+  }
   render() {
+    this.loadMarkers();
     return (
       <div onLoad={this.geoLocation(this)}>
         <div className="title-label" id="title-label">
