@@ -60,10 +60,14 @@ button:hover{
   cursor: pointer;
 }
 .article{
+  position: relative;
   z-index: 10;
 }
 .marker-child{
   animation: beat .5s infinite alternate;
+}
+.marker-child:hover{
+  fill: '#ff5454';
 }
 @keyframes beat{
 	to { transform: scale(1.5); }

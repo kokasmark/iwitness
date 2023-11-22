@@ -48,3 +48,5 @@
 {"title": "47", "text": "test", "coordinates": [-17, 92], "createdAt": 0, "author": "0", "id": 47, "votes": [19, 21]}
 {"title": "48", "text": "test", "coordinates": [59, 56], "createdAt": 0, "author": "0", "id": 48, "votes": [41, 48]}
 {"title": "49", "text": "test", "coordinates": [17, 168], "createdAt": 0, "author": "0", "id": 49, "votes": [40, 49]}
+{"title": "Én", "text": "én", "coordinates": [17.6335556, 47.6811769], "createdAt": 1700644910863, "author": "vbenfgpotzpo68yq43khp-10/22", "id": 51, "votes": [0, 0]}
+{"title": "8559", "text": "erhererg", "coordinates": [17.6335556, 47.6811769], "createdAt": 1700645048070, "author": "vbenfgpotzpo68yq43khp-10/22", "id": 52, "votes": [0, 0]}

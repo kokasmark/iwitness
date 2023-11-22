@@ -53,15 +53,19 @@ export default class ArticleMarker extends Component
               userCanInteract: false
             });
             this.props.parent.scrollToArticle();
-          }    }
+          }   
+          
+        }
     expand = (t) => {
       if(t.state.expanded == false){
+        this.props.parent.setState({currentArticle: this})
         navigator.geolocation.getCurrentPosition(this.succes, function error(err){
           console.warn(err);
         },{enableHighAccuracy: false,//TODO: NEED TO WORK ON HIGH ACCURACY FOR TESTING PURPOSES I LEFT IT ON LOW ACCURACY
           timeout: 5000,
           maximumAge: Infinity});
       }else{
+        this.props.parent.setState({currentArticle: undefined})
         this.setState({
           expanded: !this.state.expanded,
           userCanInteract: false
@@ -135,13 +139,15 @@ export default class ArticleMarker extends Component
       
       });
     }
+    show = () =>{
+      return this.state.expanded && (this.props.parent.state.currentArticle === this);
+    }
     render(){
         return (
             <Marker className="marker-click" key={"test"} coordinates={this.state.coordinates} onClick={() => this.expand(this)} onMouseOver={()=>this.setState({hover: true})} onMouseLeave={()=>this.setState({hover: false})}>
-                {this.filterMarker() &&<circle className="marker-child" r={((1+(0.1*this.state.votes[0])+(-0.1*this.state.votes[1])) > 0.1 ? (1+(0.1*this.state.votes[0])+(-0.1*this.state.votes[1])) : 0.1)/this.props.parent.state.mapScaleFactor} fill="#F00" stroke="#fff" strokeWidth={1/this.props.parent.state.mapScaleFactor} articledata ="title"/>}
-                {this.state.hover && <foreignObject width="100" height="50"><p style={{fontSize:5/this.props.parent.state.mapScaleFactor, color: 'white'}}>{this.state.articledata.title}</p></foreignObject>}
-                {this.state.expanded && <foreignObject width="300" height="500" id="article" className="marker-article">
-                {this.filterMarker() && <Card className="text-center" style={{width: 150, height: 250}}>
+                {this.filterMarker() &&<circle className="marker-child" r={((1+(0.1*this.state.votes[0])+(-0.1*this.state.votes[1])) > 0.1 ? (1+(0.1*this.state.votes[0])+(-0.1*this.state.votes[1])) : 0.1)/this.props.parent.state.mapScaleFactor} fill="#F00" stroke="#fff" strokeWidth={1/this.props.parent.state.mapScaleFactor} articledata ="title"/>}               
+                {this.show() && <foreignObject width="300" height="500" id="article" className="marker-article">
+                {this.filterMarker() && <Card className="text-center fixed-center" style={{width: 150, height: 250}}>
                     <Card.Body>
                     <Card.Title style={{fontSize: 20}} id="article-title">{this.state.articledata.title}</Card.Title>
                     <Card.Img variant="top" src="holder.js/100px180" />

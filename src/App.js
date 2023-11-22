@@ -31,7 +31,8 @@ class App extends React.Component {
     zoom: 1,
     mapCenter: [0,0],
     mapScaleFactor: 1,
-    blur: false
+    blur: false,
+    currentArticle: undefined
   };
 
   handleCallback = (childData) => {
@@ -188,7 +189,7 @@ class App extends React.Component {
             <Button style={{margin: 5, border: 'none', color: this.state.filter == 'local' ? 'white' : 'black'}} onClick={() => {this.setState({filter: 'local'}); this.zoomLocal();}}>Local</Button>
           </div>}
         </Container>
-
+      
         <p className="fixed-bottom" style={{fontSize: 10, color: 'white'}}>Designed and developed by Kokas Márk - {getUserToken()}</p>
       </div>
     );
