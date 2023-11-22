@@ -11,7 +11,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 
 scheduler = BackgroundScheduler()
 
-today = "21"
+today = open('today.txt','r').read()
 
 def clearServer():
     global today
@@ -25,6 +25,7 @@ def clearServer():
     print("Status OK - "+str(datetime.now()))
 
     today = t
+    open('today.txt','w').write(today)
 
 scheduler.add_job(func=clearServer, trigger='interval', seconds=30)
 
