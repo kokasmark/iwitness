@@ -85,9 +85,9 @@ class App extends React.Component {
     fetch("https://iwitness--markkokas.repl.co/data", requestOptions)
       .then(response => response.text())
       .then(function succes(result){
-          const markers = result.split('\n')
+          const markers = JSON.parse(result);
           for(var i = 0; i < markers.length; i++){
-            var parsed = JSON.parse(markers[i]);
+            var parsed = markers[i];
             var newMarker = {title: parsed['title'], text: parsed['text'], coordinates: parsed['coordinates'], createdAt: parsed['createdAt'], author: parsed['author'], votes: parsed['votes'], id: parsed['id']}
             self.setState({
               markers: [...self.state.markers, newMarker],
