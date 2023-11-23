@@ -23,9 +23,10 @@ def clearServer():
 
   if (t != today):
     server_path = os.path.dirname(__file__)
-    for root, dirs, files in os.walk(os.path.join(server_path, "data")):
-      for f in files:
-        os.remove(f)
+    filenames = glob.glob(server_path + "/data/*.dat")
+
+    for f in filenames:
+      os.remove(f)
 
     print('DATA WIPED')
 
@@ -92,7 +93,7 @@ def data():
       d = str(open(f, "r").read())
       for line in d.split('\n'):
         try:
-          d= json.loads(line)
+          d = json.loads(line)
           data.append(d)
         except:
           continue
