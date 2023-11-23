@@ -43,7 +43,7 @@ class NewPostButton extends Component
             this.props.parentCallback(newArticle);
             console.log("Uploaded new article: "+newArticle.title + " at "+ newArticle.createdAt);
 
-            fetch("http://localhost:5000/", {
+            fetch("https://iwitness--markkokas.repl.co/", {
               method: "POST",
               body: JSON.stringify({
                 title: newArticle.title,

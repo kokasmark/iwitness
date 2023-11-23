@@ -74,4 +74,4 @@ def updateMarker():
 
 if __name__ == '__main__': 
     scheduler.start() # If the script that was run is this script (we have not been imported)
-    app.run(debug = True)  # Start the server
+    app.run(debug = True,host='0.0.0.0', port=5000)  # Start the server

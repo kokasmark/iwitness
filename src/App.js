@@ -82,7 +82,7 @@ class App extends React.Component {
       redirect: 'follow'
     };
     
-    fetch("http://127.0.0.1:5000/data", requestOptions)
+    fetch("https://iwitness--markkokas.repl.co/data", requestOptions)
       .then(response => response.text())
       .then(function succes(result){
           const markers = result.split('\n')

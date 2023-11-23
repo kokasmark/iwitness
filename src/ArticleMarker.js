@@ -127,7 +127,7 @@ export default class ArticleMarker extends Component
       else{
         updatedVotes[1] += 1;
       }
-      fetch("http://localhost:5000/updateMarker", {
+      fetch("https://iwitness--markkokas.repl.co/updateMarker", {
         method: "POST",
         body: JSON.stringify({
           votes: updatedVotes,
