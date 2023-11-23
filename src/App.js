@@ -139,7 +139,7 @@ class App extends React.Component {
               }
             </Geographies>
             <g id='marker-container'>
-              {this.state.markers.map((marker) =>
+              {this.state.markers.sort((a, b) => (1+(0.1*a.votes[0])+(-0.1*a.votes[1]))  > (1+(0.1*b.votes[0])+(-0.1*b.votes[1]))  ? 1 : -1).map((marker) =>
                 <ArticleMarker key={marker.title}
                   coordinates={marker.coordinates} articledata={{ title: marker.title, text: marker.text }} createdAt={marker.createdAt} author={marker.author}
                   votes={marker.votes} id={marker.id} parent={this} />
@@ -175,9 +175,6 @@ class App extends React.Component {
                   ))
                 }
               </Geographies>
-              <Marker key={"new Post Position"} coordinates={this.state.userCoordinates}>
-                <circle r={20} fill="#F00" stroke="#fff" strokeWidth={1} />
-              </Marker>
             </ComposableMap>
             <p style={{color: 'red'}} className="text-center clickable interactive" onClick={this.cancelPost}>Cancel</p>
           </div>
