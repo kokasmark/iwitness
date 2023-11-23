@@ -52,6 +52,8 @@ button:hover{
 }
 .marker-article{
   visibility: visible;
+  position: relative;
+  z-index: 100;
 }
 .clickable{
   cursor: pointer;

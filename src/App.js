@@ -31,8 +31,7 @@ class App extends React.Component {
     zoom: 1,
     mapCenter: [0,0],
     mapScaleFactor: 1,
-    blur: false,
-    currentArticle: undefined
+    blur: false
   };
 
   handleCallback = (childData) => {
