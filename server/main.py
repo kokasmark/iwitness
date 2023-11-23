@@ -41,7 +41,7 @@ scheduler.add_job(func=clearServer, trigger='interval', seconds=30)
 
 def getSave(coords):
   if coords != 'all':
-    n = str(coords[0])[:6] + "-" + str(coords[1])[:6]
+    n = str(coords[0].split('.')[0]) + "-" + str(coords[1].split('.')[0])
     server_path = os.path.dirname(__file__)
     rel_path = "data/" + n + ".dat"
     abs_file_path = os.path.join(server_path, rel_path)
