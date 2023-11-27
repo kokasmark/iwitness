@@ -15,6 +15,7 @@ import {getUserToken, userInit} from "./User";
 import logo from "./assets/icon_logo_dark.png";
 
 
+
 class App extends React.Component {
   constructor(props) {
     super(props)
@@ -31,7 +32,8 @@ class App extends React.Component {
     zoom: 1,
     mapCenter: [0,0],
     mapScaleFactor: 1,
-    blur: false
+    blur: false,
+    isMobile: false
   };
 
   handleCallback = (childData) => {
@@ -99,74 +101,40 @@ class App extends React.Component {
   componentDidMount(){
     userInit();
     this.loadMarkers(this);
+    this.setState({isMobile: window.innerWidth < 768});
   }
   render() {
     return (
-      <div onLoad={this.geoLocation(this)}>
-        <div className="title-label" id="title-label">
-          <Card style={{ height: 315 }}>
-            <Card.Body>
-              <Card.Header className="text-center h1"><img src={logo} className="center" style={{height: 100, width: 500}}/></Card.Header>
-              <Card.Text className="text-center" style={{fontSize:19}}>iWitness is a dynamic platform that empowers users to share and explore real-time events through the eyes of eyewitnesses. Capture the essence of local happenings, breaking news, and unique perspectives, all on an interactive map-driven interface.</Card.Text>
-              <Button onClick={this.scrollToMap} className="w-100 text-center" style={{position:'relative',top:-20, height: 40, padding:0, marginTop: 10}}>Go see todays news</Button>
-            </Card.Body>
-          </Card>
-        </div>
-        <br/>
-        <div className="title-label">
-          <Card style={{ height: 300 }}>
-            <Card.Body>
-              <Card.Header className="text-center h1">How it works</Card.Header>
-              <Card.Text className="text-center">iWitness enables users to share location-based articles, represented as markers on the map. Those within a 1km radius can vote to approve or disapprove, while users outside this range can comment but not vote, preventing the spread of misinformation. The size of the marker increases with more local approvals</Card.Text>
-            </Card.Body>
-          </Card>
-        </div>
-        
-        <ComposableMap id="map" projectionConfig={{
-          scale: 125,
-          center: this.state.mapCenter,
-        }} style={this.state.blur == true ? {filter: 'blur(3px)'}:{}}>
-          <ZoomableGroup id="zoom" width={this.state.mapWidth} height={this.state.mapHeight} center={this.state.mapCenter} zoom={this.state.zoom} maxZoom={50} translateExtent={[
-            [0, -this.state.mapHeight/4],
-            [this.state.mapWidth, this.state.mapHeight]
-          ]} onMove={({ k }) => this.setState({mapScaleFactor: k})}>
-            <Geographies geography="/features.json">
-              {({ geographies }) =>
-                geographies.map((geo) => (
-                  <Geography key={geo.rsmKey} geography={geo} />
-                ))
-              }
-            </Geographies>
-            <g id='marker-container'>
-              {this.state.markers.sort((a, b) => (1+(0.1*a.votes[0])+(-0.1*a.votes[1]))  > (1+(0.1*b.votes[0])+(-0.1*b.votes[1]))  ? 1 : -1).map((marker) =>
-                <ArticleMarker key={marker.title}
-                  coordinates={marker.coordinates} articledata={{ title: marker.title, text: marker.text }} createdAt={marker.createdAt} author={marker.author}
-                  votes={marker.votes} id={marker.id} parent={this} />
-              )}
-            </g>
-          </ZoomableGroup>
-        </ComposableMap>
-
-        <Container className="fixed-top" style={{height: 100}}>
-          <Navbar expand="lg" style={{ borderRadius: '0px 0px 10px 10px', backgroundColor: 'white' }}>
-            <Container>
-              <img src={logo} className="center clickable interactive" onClick={this.scrollToTitle} style={{height: 50, width: 250, position: 'relative', right: 50}}/>
-              <Navbar.Brand className="center" style={{position:'relative',right:-100}}>{this.state.articlesToday} Articles posted today</Navbar.Brand>
-              <Button style={{position: 'relative', right:-160}} onClick={() => this.setState({openFilters: !this.state.openFilters})} className="interactive">Filters</Button>
-              <NewPostButton parentCallback={this.handleCallback} parent={this} className="interactive"/>
-            </Container>
-          </Navbar>
-
-          {this.state.newPost && <h1 style={{color: 'white' ,position: 'relative', top: 200, right: -500}}>New Post</h1>}
-          <div className="fixed-center" id='new-post-panel' style={{width: 300, height: 400, backgroundColor: 'white', borderRadius: '10px',position: 'relative', top: 200, right: -500,visibility: 'hidden' }}>
-            <Form.Control autocomplete="off" size="lg" type="text" placeholder="Title" id='new-post-title' />
-            <Form.Control autocomplete="off" size="sm" cols="30" rows="50" type="text" placeholder="Descibe what you see" id='new-post-text' />
-            <Form.Control type="file" />
-            <ComposableMap projectionConfig={{
-              scale: 5000,
-              center: this.state.userCoordinates
-            }}>
-
+      <div>
+      {this.state.isMobile == false && <div className="desktop-view">
+        <div onLoad={this.geoLocation(this)}>
+          <div className="title-label" id="title-label">
+            <Card style={{ height: 315 }}>
+              <Card.Body>
+                <Card.Header className="text-center h1"><img src={logo} className="center" style={{height: 100, width: 500}}/></Card.Header>
+                <Card.Text className="text-center" style={{fontSize:19}}>iWitness is a dynamic platform that empowers users to share and explore real-time events through the eyes of eyewitnesses. Capture the essence of local happenings, breaking news, and unique perspectives, all on an interactive map-driven interface.</Card.Text>
+                <Button onClick={this.scrollToMap} className="w-100 text-center" style={{position:'relative',top:-20, height: 40, padding:0, marginTop: 10}}>Go see todays news</Button>
+              </Card.Body>
+            </Card>
+          </div>
+          <br/>
+          <div className="title-label">
+            <Card style={{ height: 300 }}>
+              <Card.Body>
+                <Card.Header className="text-center h1">How it works</Card.Header>
+                <Card.Text className="text-center">iWitness enables users to share location-based articles, represented as markers on the map. Those within a 1km radius can vote to approve or disapprove, while users outside this range can comment but not vote, preventing the spread of misinformation. The size of the marker increases with more local approvals</Card.Text>
+              </Card.Body>
+            </Card>
+          </div>
+          
+          <ComposableMap id="map" projectionConfig={{
+            scale: 125,
+            center: this.state.mapCenter,
+          }} style={this.state.blur == true ? {filter: 'blur(3px)'}:{}}>
+            <ZoomableGroup id="zoom" width={this.state.mapWidth} height={this.state.mapHeight} center={this.state.mapCenter} zoom={this.state.zoom} maxZoom={50} translateExtent={[
+              [0, -this.state.mapHeight/4],
+              [this.state.mapWidth, this.state.mapHeight]
+            ]} onMove={({ k }) => this.setState({mapScaleFactor: k})}>
               <Geographies geography="/features.json">
                 {({ geographies }) =>
                   geographies.map((geo) => (
@@ -174,19 +142,124 @@ class App extends React.Component {
                   ))
                 }
               </Geographies>
-            </ComposableMap>
-            <p style={{color: 'red'}} className="text-center clickable interactive" onClick={this.cancelPost}>Cancel</p>
+              <g id='marker-container'>
+                {this.state.markers.sort((a, b) => (1+(0.1*a.votes[0])+(-0.1*a.votes[1]))  > (1+(0.1*b.votes[0])+(-0.1*b.votes[1]))  ? 1 : -1).map((marker) =>
+                  <ArticleMarker key={marker.title}
+                    coordinates={marker.coordinates} articledata={{ title: marker.title, text: marker.text }} createdAt={marker.createdAt} author={marker.author}
+                    votes={marker.votes} id={marker.id} parent={this} />
+                )}
+              </g>
+            </ZoomableGroup>
+          </ComposableMap>
+
+          <Container className="fixed-top" style={{height: 100}}>
+            <Navbar expand="lg" style={{ borderRadius: '0px 0px 10px 10px', backgroundColor: 'white' }}>
+              <Container>
+                <img src={logo} className="center clickable interactive" onClick={this.scrollToTitle} style={{height: 50, width: 250, position: 'relative', right: 50}}/>
+                <Navbar.Brand className="center" style={{position:'relative',right:-100}}>{this.state.articlesToday} Articles posted today</Navbar.Brand>
+                <Button style={{position: 'relative', right:-160}} onClick={() => this.setState({openFilters: !this.state.openFilters})} className="interactive">Filters</Button>
+                <NewPostButton parentCallback={this.handleCallback} parent={this} className="interactive"/>
+              </Container>
+            </Navbar>
+
+            {this.state.newPost && <h1 style={{color: 'white' ,position: 'relative', top: 200, right: -500}}>New Post</h1>}
+            <div className="fixed-center" id='new-post-panel' style={{width: 300, height: 400, backgroundColor: 'white', borderRadius: '10px',position: 'relative', top: 200, right: -500,visibility: 'hidden' }}>
+              <Form.Control autocomplete="off" size="lg" type="text" placeholder="Title" id='new-post-title' />
+              <Form.Control autocomplete="off" size="sm" cols="30" rows="50" type="text" placeholder="Descibe what you see" id='new-post-text' />
+              <Form.Control type="file" />
+              <ComposableMap projectionConfig={{
+                scale: 5000,
+                center: this.state.userCoordinates
+              }}>
+
+                <Geographies geography="/features.json">
+                  {({ geographies }) =>
+                    geographies.map((geo) => (
+                      <Geography key={geo.rsmKey} geography={geo} />
+                    ))
+                  }
+                </Geographies>
+              </ComposableMap>
+              <p style={{color: 'red'}} className="text-center clickable interactive" onClick={this.cancelPost}>Cancel</p>
+            </div>
+            {this.state.openFilters && <div className="text-center" style={{ width: 200, height: 220, backgroundColor: 'white', borderRadius: '0px 0px 10px 10px', position: 'relative', left: 990,top:-400}}>
+              <Button style={{margin: 5,backgroundColor: 'orange', border:'none', color: this.state.filter == 'top' ? 'white' : 'black'}} onClick={() => {this.setState({filter: 'top'});this.setState({mapCenter: [0,0], zoom: 1, mapScaleFactor:1});}}>Top</Button>
+              <Button style={{margin: 5,backgroundColor: 'red', border:'none', color: this.state.filter == 'controversial' ? 'white' : 'black'}} onClick={() => {this.setState({filter: 'controversial'});this.setState({mapCenter: [0,0], zoom: 1, mapScaleFactor:1});}}>Controversial</Button>
+              <Button style={{margin: 5, border:'none', color: this.state.filter == 'new' ? 'white' : 'black' }} onClick={() => {this.setState({filter: 'new'});this.setState({mapCenter: [0,0], zoom: 1, mapScaleFactor:1});}}>New</Button>
+              <Button style={{margin: 5, border: 'none', color: this.state.filter == 'all' ? 'white' : 'black'}} onClick={() => {this.setState({filter: 'all'});this.setState({mapCenter: [0,0], zoom: 1, mapScaleFactor:1});}}>All</Button>
+              <Button style={{margin: 5, border: 'none', color: this.state.filter == 'local' ? 'white' : 'black'}} onClick={() => {this.setState({filter: 'local'}); this.zoomLocal();}}>Local</Button>
+            </div>}
+          </Container>
+        
+          <p className="fixed-bottom" style={{fontSize: 10, color: 'white'}}>Designed and developed by Kokas Márk - {getUserToken()}</p>
+        </div>
+      </div>}
+      {this.state.isMobile == true && 
+        <div>
+          <Container className="fixed-top" style={{height: 100}}>
+            <Navbar expand="lg" style={{ borderRadius: '0px 0px 10px 10px', backgroundColor: 'white' }}>
+              <Container>
+                <img src={logo} className="center clickable interactive" onClick={this.scrollToTitle} style={{height: 50, width: 250, position: 'relative', right:-50}}/>
+                <Navbar.Brand className="center" style={{position:'relative',fontSize:20,right: -75, top: -20}}>{this.state.articlesToday} Articles posted today</Navbar.Brand>
+                <Button style={{position: 'relative', right:0, top: 50}} onClick={() => this.setState({openFilters: !this.state.openFilters})} className="interactive">Filters</Button>
+                <NewPostButton parentCallback={this.handleCallback} parent={this} className="interactive"/>
+              </Container>
+            </Navbar>
+
+            <div className="fixed-center" id='new-post-panel' style={{width: 300, height: 400, backgroundColor: 'white', borderRadius: '10px',position: 'relative', top: 25, right: -30,visibility: 'hidden' }}>
+              <Form.Control autocomplete="off" size="lg" type="text" placeholder="Title" id='new-post-title' />
+              <Form.Control autocomplete="off" size="sm" cols="30" rows="50" type="text" placeholder="Descibe what you see" id='new-post-text' />
+              <Form.Control type="file" />
+              <ComposableMap projectionConfig={{
+                scale: 4000,
+                center: this.state.userCoordinates
+              }}>
+
+                <Geographies geography="/features.json">
+                  {({ geographies }) =>
+                    geographies.map((geo) => (
+                      <Geography key={geo.rsmKey} geography={geo} />
+                    ))
+                  }
+                </Geographies>
+              </ComposableMap>
+              <p style={{color: 'red'}} className="text-center clickable interactive" onClick={this.cancelPost}>Cancel</p>
+            </div>
+            {this.state.openFilters && <div className="text-center" style={{ width: 200, height: 220, backgroundColor: 'white', borderRadius: '0px 0px 10px 10px', position: 'relative', right:-175,top:-425, transform: "scale(0.8)"}}>
+              <Button style={{margin: 5,backgroundColor: 'orange', border:'none', color: this.state.filter == 'top' ? 'white' : 'black'}} onClick={() => {this.setState({filter: 'top'});this.setState({mapCenter: [0,0], zoom: 1, mapScaleFactor:1});}}>Top</Button>
+              <Button style={{margin: 5,backgroundColor: 'red', border:'none', color: this.state.filter == 'controversial' ? 'white' : 'black'}} onClick={() => {this.setState({filter: 'controversial'});this.setState({mapCenter: [0,0], zoom: 1, mapScaleFactor:1});}}>Controversial</Button>
+              <Button style={{margin: 5, border:'none', color: this.state.filter == 'new' ? 'white' : 'black' }} onClick={() => {this.setState({filter: 'new'});this.setState({mapCenter: [0,0], zoom: 1, mapScaleFactor:1});}}>New</Button>
+              <Button style={{margin: 5, border: 'none', color: this.state.filter == 'all' ? 'white' : 'black'}} onClick={() => {this.setState({filter: 'all'});this.setState({mapCenter: [0,0], zoom: 1, mapScaleFactor:1});}}>All</Button>
+              <Button style={{margin: 5, border: 'none', color: this.state.filter == 'local' ? 'white' : 'black'}} onClick={() => {this.setState({filter: 'local'}); this.zoomLocal();}}>Local</Button>
+            </div>}
+          </Container>
+
+          {this.state.newPost == false && <ComposableMap id="map" className="fixed-bottom" projectionConfig={{
+            scale: 250,
+            center: this.state.mapCenter,
+          }} style={this.state.blur == true ? {filter: 'blur(3px)'}:{position: 'relative', top: 200}}>
+            <ZoomableGroup id="zoom" width={this.state.mapWidth} height={this.state.mapHeight} center={this.state.mapCenter} zoom={this.state.zoom} maxZoom={50} translateExtent={[
+              [0, -this.state.mapHeight/4],
+              [this.state.mapWidth, this.state.mapHeight]
+            ]} onMove={({ k }) => this.setState({mapScaleFactor: k})}>
+              <Geographies geography="/features.json">
+                {({ geographies }) =>
+                  geographies.map((geo) => (
+                    <Geography key={geo.rsmKey} geography={geo} />
+                  ))
+                }
+              </Geographies>
+              <g id='marker-container'>
+                {this.state.markers.sort((a, b) => (1+(0.1*a.votes[0])+(-0.1*a.votes[1]))  > (1+(0.1*b.votes[0])+(-0.1*b.votes[1]))  ? 1 : -1).map((marker) =>
+                  <ArticleMarker key={marker.title}
+                    coordinates={marker.coordinates} articledata={{ title: marker.title, text: marker.text }} createdAt={marker.createdAt} author={marker.author}
+                    votes={marker.votes} id={marker.id} parent={this} />
+                )}
+              </g>
+            </ZoomableGroup>
+          </ComposableMap>}
           </div>
-          {this.state.openFilters && <div className="text-center" style={{ width: 200, height: 220, backgroundColor: 'white', borderRadius: '0px 0px 10px 10px', position: 'relative', left: 990,top:-400}}>
-            <Button style={{margin: 5,backgroundColor: 'orange', border:'none', color: this.state.filter == 'top' ? 'white' : 'black'}} onClick={() => {this.setState({filter: 'top'});this.setState({mapCenter: [0,0], zoom: 1, mapScaleFactor:1});}}>Top</Button>
-            <Button style={{margin: 5,backgroundColor: 'red', border:'none', color: this.state.filter == 'controversial' ? 'white' : 'black'}} onClick={() => {this.setState({filter: 'controversial'});this.setState({mapCenter: [0,0], zoom: 1, mapScaleFactor:1});}}>Controversial</Button>
-            <Button style={{margin: 5, border:'none', color: this.state.filter == 'new' ? 'white' : 'black' }} onClick={() => {this.setState({filter: 'new'});this.setState({mapCenter: [0,0], zoom: 1, mapScaleFactor:1});}}>New</Button>
-            <Button style={{margin: 5, border: 'none', color: this.state.filter == 'all' ? 'white' : 'black'}} onClick={() => {this.setState({filter: 'all'});this.setState({mapCenter: [0,0], zoom: 1, mapScaleFactor:1});}}>All</Button>
-            <Button style={{margin: 5, border: 'none', color: this.state.filter == 'local' ? 'white' : 'black'}} onClick={() => {this.setState({filter: 'local'}); this.zoomLocal();}}>Local</Button>
-          </div>}
-        </Container>
-      
-        <p className="fixed-bottom" style={{fontSize: 10, color: 'white'}}>Designed and developed by Kokas Márk - {getUserToken()}</p>
+        }
       </div>
     );
   }
