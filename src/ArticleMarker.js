@@ -147,14 +147,14 @@ export default class ArticleMarker extends Component
             <Marker className="marker-click" key={"test"} coordinates={this.state.coordinates} onClick={() => this.expand(this)} onMouseOver={()=>this.setState({hover: true})} onMouseLeave={()=>this.setState({hover: false})}>
                 {this.filterMarker() &&<circle className="marker-child" r={(((1+(0.1*this.state.votes[0])+(-0.1*this.state.votes[1])) > 0.1 ? (1+(0.1*this.state.votes[0])+(-0.1*this.state.votes[1])) : 0.1)/this.props.parent.state.mapScaleFactor) * this.props.parent.state.isMobile == true ? 2:1} fill="#F00" stroke="#fff" strokeWidth={1/this.props.parent.state.mapScaleFactor} articledata ="title"/>}               
                 {this.show() && <foreignObject width="300" height="500" id="article" className="marker-article">
-                {this.filterMarker() && <Card className="text-center fixed-center" style={{width: 150, height: 250}}>
+                {this.filterMarker() && <Card className="text-center fixed-center" style={this.props.parent.state.isMobile == false ? {width: 150, height: 250}: {width: 150, height: 250, position: 'relative', right: -110, top: 20, transform: 'scale(0.8)'}}>
                     <Card.Body>
                     <Card.Title style={{fontSize: 20}} id="article-title">{this.state.articledata.title}</Card.Title>
-                    <Card.Img variant="top" src="holder.js/100px180" />
+                    <Card.Img variant="top" src="holder.js/100px180" style={{width:100, height: 100}}/>
                     <Card.Text style={{fontSize: 5,height:100, maxHeight: 100}} id="article-text">
                     {this.state.articledata.text}
                     </Card.Text>
-                    <div style={{position:'relative',top: -30}}>
+                    <div style={{position:'relative',top: -100}}>
 
                     {this.state.userCanInteract && <Card.Img style={{width: 25, height: 25, margin: 5}} src={icon_approve} onClick={this.approve}/>}
                     <Card.Img style={{width: 25, height: 25, margin: 5}} src={icon_comment}/>

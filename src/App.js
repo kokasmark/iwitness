@@ -202,13 +202,38 @@ class App extends React.Component {
 
       {this.state.isMobile == true && 
         <div>
+          {this.state.newPost == false && <ComposableMap id="map" projectionConfig={{
+            scale: 500,
+            center: this.state.userCoordinates,
+          }} style={this.state.blur == true ? {filter: 'blur(3px)'}:{position: 'relative', top: 300,transform: 'scale(2.0)'}}>
+            <ZoomableGroup id="zoom" width={this.state.mapWidth * 2} height={this.state.mapHeight*2} center={this.state.userCoordinates} zoom={this.state.zoom} maxZoom={50} translateExtent={[
+              [-this.state.mapWidth*2, -this.state.mapHeight/4],
+              [this.state.mapWidth*2, this.state.mapHeight*4]
+            ]} onMove={({ k }) => this.setState({mapScaleFactor: k})}>
+              <Geographies geography="/features.json">
+                {({ geographies }) =>
+                  geographies.map((geo) => (
+                    <Geography key={geo.rsmKey} geography={geo} />
+                  ))
+                }
+              </Geographies>
+              <g id='marker-container'>
+                {this.state.markers.sort((a, b) => (1+(0.1*a.votes[0])+(-0.1*a.votes[1]))  > (1+(0.1*b.votes[0])+(-0.1*b.votes[1]))  ? 1 : -1).map((marker) =>
+                  <ArticleMarker key={marker.title}
+                    coordinates={marker.coordinates} articledata={{ title: marker.title, text: marker.text }} createdAt={marker.createdAt} author={marker.author}
+                    votes={marker.votes} id={marker.id} parent={this} />
+                )}
+              </g>
+            </ZoomableGroup>
+          </ComposableMap>}
+
           <Container className="fixed-top" style={{height: 100}}>
             <Navbar expand="lg" style={{ borderRadius: '0px 0px 10px 10px', backgroundColor: 'white' }}>
-              <Container>
-                <img src={logo} className="center clickable interactive" onClick={this.scrollToTitle} style={{height: 50, width: 250, position: 'relative', right:-50}}/>
-                <Navbar.Brand className="center" style={{position:'relative',fontSize:20,right: -75, top: -20}}>{this.state.articlesToday} Articles posted today</Navbar.Brand>
-                <Button style={{position: 'relative', right:0, top: 50}} onClick={() => this.setState({openFilters: !this.state.openFilters})} className="interactive">Filters</Button>
-                <NewPostButton parentCallback={this.handleCallback} parent={this} className="interactive"/>
+              <Container style={{height: 75}}>
+                <img src={logo} className="center clickable interactive" onClick={this.scrollToTitle} style={{height: 50, width: 250, position: 'relative', right:90, top:-5}}/>
+                <Navbar.Brand className="center" style={{position:'relative',fontSize:20,right: 20, top: -15}}>{this.state.articlesToday} Articles posted today</Navbar.Brand>
+                <Button style={{position: 'relative', right:0, top: -15}} onClick={() => this.setState({openFilters: !this.state.openFilters})} className="interactive">Filters</Button>
+                <NewPostButton style={{position: 'absolute', right:0, top: 20}} parentCallback={this.handleCallback} parent={this} className="interactive"/>    
               </Container>
             </Navbar>
 
@@ -240,30 +265,7 @@ class App extends React.Component {
             </div>}
           </Container>
 
-          {this.state.newPost == false && <ComposableMap id="map" className="fixed-bottom" projectionConfig={{
-            scale: 500,
-            center: this.state.userCoordinates,
-          }} style={this.state.blur == true ? {filter: 'blur(3px)'}:{position: 'relative', top: -300}}>
-            <ZoomableGroup id="zoom" width={this.state.mapWidth} height={this.state.mapHeight} center={this.state.mapCenter} zoom={this.state.zoom} maxZoom={50} translateExtent={[
-              [-this.state.mapWidth*2, -this.state.mapHeight/4],
-              [this.state.mapWidth*2, this.state.mapHeight*4]
-            ]} onMove={({ k }) => this.setState({mapScaleFactor: k})}>
-              <Geographies geography="/features.json">
-                {({ geographies }) =>
-                  geographies.map((geo) => (
-                    <Geography key={geo.rsmKey} geography={geo} />
-                  ))
-                }
-              </Geographies>
-              <g id='marker-container'>
-                {this.state.markers.sort((a, b) => (1+(0.1*a.votes[0])+(-0.1*a.votes[1]))  > (1+(0.1*b.votes[0])+(-0.1*b.votes[1]))  ? 1 : -1).map((marker) =>
-                  <ArticleMarker key={marker.title}
-                    coordinates={marker.coordinates} articledata={{ title: marker.title, text: marker.text }} createdAt={marker.createdAt} author={marker.author}
-                    votes={marker.votes} id={marker.id} parent={this} />
-                )}
-              </g>
-            </ZoomableGroup>
-          </ComposableMap>}
+          
           </div>
         }
       </div>

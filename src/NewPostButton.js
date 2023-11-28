@@ -69,7 +69,9 @@ class NewPostButton extends Component
     }
     render(){
         return (
+          <div>
             <Button id='post-button' variant="primary" onClick={this.click}>{this.props.parent.state.newPost == true ? 'Upload Post' : 'New Post'}</Button>
+            </div>
       );
     }
 
