@@ -231,9 +231,9 @@ class App extends React.Component {
             <Navbar expand="lg" style={{ borderRadius: '0px 0px 10px 10px', backgroundColor: 'white' }}>
               <Container style={{height: 75}}>
                 <img src={logo} className="center clickable interactive" onClick={this.scrollToTitle} style={{height: 50, width: 250, position: 'relative', right:90, top:-5}}/>
-                <Navbar.Brand className="center" style={{position:'relative',fontSize:20,right: 20, top: -15}}>{this.state.articlesToday} Articles posted today</Navbar.Brand>
-                <Button style={{position: 'relative', right:0, top: -15}} onClick={() => this.setState({openFilters: !this.state.openFilters})} className="interactive">Filters</Button>
-                <NewPostButton style={{position: 'absolute', right:0, top: 20}} parentCallback={this.handleCallback} parent={this} className="interactive"/>    
+                <Navbar.Brand className="center" style={{position:'relative',fontSize:20,right: 10, top: -15}}>{this.state.articlesToday} Articles posted today</Navbar.Brand>
+                <Button style={{position: 'relative', right:0, top: -10, height: 40, textAlign: 'center', padding: 1}} onClick={() => this.setState({openFilters: !this.state.openFilters})} className="interactive">Filters</Button>
+                <div style={{position: 'relative', right:-220, top: -100, height: 40}}><NewPostButton parentCallback={this.handleCallback} parent={this} className="interactive"/></div>    
               </Container>
             </Navbar>
 
@@ -242,7 +242,7 @@ class App extends React.Component {
               <Form.Control autocomplete="off" size="sm" cols="30" rows="50" type="text" placeholder="Descibe what you see" id='new-post-text' />
               <Form.Control type="file" />
               <ComposableMap projectionConfig={{
-                scale: 4000,
+                scale: 4250,
                 center: this.state.userCoordinates
               }}>
 
