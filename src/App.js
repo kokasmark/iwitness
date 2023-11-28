@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Form from 'react-bootstrap/Form';
+import Carousel from 'react-bootstrap/Carousel';
 import "./styles.css";
 import { useState, useRef, useEffect } from 'react';
 import ArticleMarker from "./ArticleMarker";
@@ -194,6 +195,11 @@ class App extends React.Component {
           <p className="fixed-bottom" style={{fontSize: 10, color: 'white'}}>Designed and developed by Kokas Márk - {getUserToken()}</p>
         </div>
       </div>}
+
+
+      {/*MOBILE VIEW*/}
+
+
       {this.state.isMobile == true && 
         <div>
           <Container className="fixed-top" style={{height: 100}}>
@@ -235,12 +241,12 @@ class App extends React.Component {
           </Container>
 
           {this.state.newPost == false && <ComposableMap id="map" className="fixed-bottom" projectionConfig={{
-            scale: 250,
-            center: this.state.mapCenter,
-          }} style={this.state.blur == true ? {filter: 'blur(3px)'}:{position: 'relative', top: 200}}>
+            scale: 500,
+            center: this.state.userCoordinates,
+          }} style={this.state.blur == true ? {filter: 'blur(3px)'}:{position: 'relative', top: -300}}>
             <ZoomableGroup id="zoom" width={this.state.mapWidth} height={this.state.mapHeight} center={this.state.mapCenter} zoom={this.state.zoom} maxZoom={50} translateExtent={[
-              [0, -this.state.mapHeight/4],
-              [this.state.mapWidth, this.state.mapHeight]
+              [-this.state.mapWidth*2, -this.state.mapHeight/4],
+              [this.state.mapWidth*2, this.state.mapHeight*4]
             ]} onMove={({ k }) => this.setState({mapScaleFactor: k})}>
               <Geographies geography="/features.json">
                 {({ geographies }) =>
